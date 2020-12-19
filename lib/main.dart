@@ -41,7 +41,6 @@ class MapSampleState extends State<MapSample> {
   String avatar;
   @override
   void initState() {
-    locatedPosition();
     getHttp();
     super.initState();
   }
@@ -67,13 +66,13 @@ class MapSampleState extends State<MapSample> {
           return AlertDialog(
             // title: Text('$firstName $lastName'),
             content: Container(
-              height: 200,
+              height: MediaQuery.of(context).size.height * 0.25,
               child: Column(
                 children: [
                   Text('Name : $firstName $lastName'),
                   Text('Email : $email'),
                   Card(
-                    child: Image.network(avatar),
+                    child: Image.asset('assets/car.png'),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -154,25 +153,56 @@ class MapSampleState extends State<MapSample> {
     });
   }
 
+  static final CameraPosition _kLake = CameraPosition(
+      bearing: 192.8334901395799,
+      target: LatLng(23.8103, -90.4125),
+      tilt: 59.440717697143555,
+      zoom: 19.151926040649414);
+
   @override
   Widget build(BuildContext context) {
+    double heights = MediaQuery.of(context).size.height;
+    double widths = MediaQuery.of(context).size.width;
     return new Scaffold(
-      body: GoogleMap(
-        markers: Set.of((marker != null) ? [marker] : []),
-        mapType: MapType.hybrid,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller = controller;
-          locatedPosition();
-        },
+      appBar: AppBar(
+        title: Text('Google Map'),
       ),
-      //   floatingActionButton: FloatingActionButton.extended(
-      //     onPressed: () {
-      //       return locatedPosition();
-      //     },
-      //     label: Text('your corrent location'),
-      //     icon: Icon(Icons.location_searching),
-      //   ),
+      body: Stack(
+        children: [
+          GoogleMap(
+            markers: Set.of((marker != null) ? [marker] : []),
+            mapType: MapType.hybrid,
+            initialCameraPosition: _kGooglePlex,
+            onMapCreated: (GoogleMapController controller) {
+              _controller = controller;
+              locatedPosition();
+            },
+          ),
+          Positioned(
+              top: heights * 0.03,
+              left: widths * 0.80,
+              right: widths * .03,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                height: 50,
+                width: 50,
+                child: IconButton(
+                    icon: Icon(Icons.location_searching, color: Colors.black),
+                    onPressed: () {
+                      return locatedPosition();
+                    }),
+              )),
+        ],
+      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: () {
+
+      //   },
+      //   label: Text('corrent location'),
+      //   icon: Icon(Icons.location_searching),
+      // ),
     );
   }
 }
