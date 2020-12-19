@@ -32,6 +32,7 @@ dependencies:
   geolocator: ^6.1.13
   location: ^3.1.0
   dio: ^3.0.10
+  compasstools: ^0.1.0
 
 dev_dependencies:
   flutter_test:
